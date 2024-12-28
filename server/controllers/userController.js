@@ -1,5 +1,4 @@
-import userModel from "../models/userModel";
-import { isAuthenticated } from "./authController";
+import userModel from "../models/userModel.js";
 
 export const getUserData = async (req, res) => {
     try {

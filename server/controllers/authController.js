@@ -1,8 +1,7 @@
 import bcrypt from 'bcryptjs';
-import { jwt } from 'jsonwebtoken';
-import userModel from '../models/userModel';
-import transporter from '../config/nodeMailer';
-import { model } from 'mongoose';
+import jwt from 'jsonwebtoken';
+import userModel from '../models/userModel.js';
+import transporter from '../config/nodeMailer.js';
 
 
 export const register = async (req, res) => {
