@@ -10,7 +10,7 @@ export const register = async (req, res) => {
         return res.json({ success: false, message: 'Missing Details' });
     }
     try {
-        existingUser = await userModel.findOne({ email });
+        const existingUser = await userModel.findOne({ email });
         if (existingUser) {
             return res.json({ success: false, message: 'User already exists' });
         }
@@ -87,7 +87,7 @@ export const sendVerifyOtp = async (req, res) => {
         }
 
         const otp = String(Math.floor(100000 + Math.random() * 900000));
-        user.sendVerifyOtp = otp;
+        user.verifyOtp = otp;
         user.verifyOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
         await user.save();
         const mailOption = {
@@ -104,8 +104,9 @@ export const sendVerifyOtp = async (req, res) => {
 }
 
 export const verifyEmail = async (req, res) => {
-    const { userId, otp } = res.body;
-    if (!user || !otp) {
+    const { userId, otp } = req.body;
+    console.log(otp);
+    if (!userId || !otp) {
         return res.json({ success: false, message: 'Missing details' });
     }
     try {
@@ -178,7 +179,7 @@ export const resetPassword = async (req, res) => {
         if (user.resetOtp === "" || user.resetOtp !== otp) {
             return res.json({ success: false, message: 'Invalid OTP' });
         }
-        if (user.verifyOtpExpireAt < Date.now()) {
+        if (user.resetOtpExpireAt < Date.now()) {
             return res.json({ success: false, message: 'OTP Expired' });
         }
         const hashedPassword = await bcrypt.hash(newPassword, 10);
